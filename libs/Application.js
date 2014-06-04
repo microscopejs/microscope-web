@@ -26,6 +26,7 @@ function Application (options) {
 _.extend(Application.prototype, {
 
 	port: 3000,
+	startHubs: false,
 
 	initialize: function () {},
 
@@ -61,31 +62,49 @@ _.extend(Application.prototype, {
 		};
 	},
 
-	_loadControllerFromFolder: function (folderpath) {
+	_loadModulesFromFolder: function (folderpath, options) {
 		var self = this;
 		fs.readdir(folderpath, function (err, files) {
 			if (err) { throw err; }
 			files.forEach(function (file) {
 				if (path.extname(file) === '.js') {
-					var Controller = require(folderpath + file);
-					var controller = new Controller({app: self.app});
+					var Module = require(folderpath + file);
+					var m = new Module(options);
 				}
+			});
+		});
+	},
+
+	// boot socket server
+	_loadSocketServer: function (server) {
+		var self = this;
+		var io = require('socket.io')(server);
+		io.on('connection', function(socket){
+			console.log('a user connected');
+			self._loadModulesFromFolder(__dirname + '/app/hubs/', {io: io, socket: socket});
+			socket.on('disconnect', function(){
+				console.log('user disconnected');
 			});
 		});
 	},
 
 	// boot controller & api
 	_boot: function () {
-		this._loadControllerFromFolder(__dirname + '/app/api/');
-		this._loadControllerFromFolder(__dirname + '/app/controllers/');
+		this._loadModulesFromFolder(__dirname + '/app/api/', {app: this.app});
+		this._loadModulesFromFolder(__dirname + '/app/controllers/', {app: this.app});
 	},
 
 	run: function (callback) {
 		this._boot();
 		var port = this.port || process.env.PORT;
-		return http.createServer(this.app).listen(port, function () {
+		var server = http.createServer(this.app).listen(port, function () {
 			if(callback) callback();
 		});
+		if(this.startHubs){
+			console.log(this.startHubs);
+			this._loadSocketServer(server);
+		}
+		return server;
 	}
 });
 

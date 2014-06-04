@@ -1,10 +1,9 @@
 /**
  * Imports
  */
-var utils         = require('./libs/utils');
-var Application   = require('./libs/Application');
-var Controller    = require('./libs/Controller');
-var ApiController = require('./libs/ApiController');
+var Application = require('./libs/Application');
+var Controller  = require('./libs/Controller');
+var Hub         = require('./libs/Hub');
 
 /**
  * Define microscopeWeb
@@ -12,7 +11,7 @@ var ApiController = require('./libs/ApiController');
 var microscopeWeb = {
 	Application: Application,
 	Controller: Controller,
-	ApiController: ApiController
+	Hub: Hub
 };
 
 module.exports = microscopeWeb;

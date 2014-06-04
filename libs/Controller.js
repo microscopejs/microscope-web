@@ -24,7 +24,7 @@ _.extend(Controller.prototype, {
 
     initialize: function() {},
 
-    acceptVerb: ['get', 'post'],
+    acceptVerb: ['get', 'post', 'put', 'delete', 'patch'],
 
     _parseRoutes: function() {
         if (!this.routes) return;
