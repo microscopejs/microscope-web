@@ -101,7 +101,6 @@ _.extend(Application.prototype, {
 			if(callback) callback();
 		});
 		if(this.startHubs){
-			console.log(this.startHubs);
 			this._loadSocketServer(server);
 		}
 		return server;
