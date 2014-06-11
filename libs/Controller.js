@@ -42,11 +42,12 @@ _.extend(Controller.prototype, {
         if (!route.path && !route.action) return;
         var verb = route.verb || 'get';
         if (_.contains(this.acceptVerb, verb)) {
-            if (_.has(this.app, verb) && _.isFunction(this[route.action])) {
+            if (_.has(this.app, verb) && (_.isFunction(this[route.action]) || _.isFunction(route.action))) {
 
                 var ignoreBasePath = route.ignoreBasePath || false,
                     routePath = route.path,
-                    filters = _.result(route, 'filters') || [];
+                    filters = _.result(route, 'filters') || []
+                    action = this[route.action] || route.action;
 
                 if (this.basePath && !ignoreBasePath) {
                     routePath = this.basePath === '/' ? route.path : this.basePath + (route.path === '/' ? '' : route.path);
@@ -54,10 +55,10 @@ _.extend(Controller.prototype, {
 
                 // if path === '/' map route with basePath too
                 if (this.basePath && route.path === '/') {
-                    this.app[verb](this.basePath, filters, this[route.action].bind(this));
+                    this.app[verb](this.basePath, filters, action.bind(this));
                 }
 
-                this.app[verb](routePath, filters, this[route.action].bind(this));
+                this.app[verb](routePath, filters, action.bind(this));
             } else {
                 console.log(route.action + " is not a controller action (function)");
             }
