@@ -101,9 +101,8 @@ AuthenticationProvider
 ```js
 
 // Imports
-var AuthenticationProvider = require('./libs/AuthenticationProvider');
-var localStrategy          = require('./strategies/localStrategy');
-var googleStrategy         = require('./strategies/googleStrategy');
+var localStrategy  = require('./strategies/localStrategy');
+var googleStrategy = require('./strategies/googleStrategy');
 
 // Authentication class
 module.exports = AuthenticationProvider.extend({
