@@ -20,7 +20,6 @@ function Application (options) {
 	this._registerBaseMiddlewares();
 	this._registerMiddlewares();
 	this.initialize.apply(this, arguments);
-	this.app.use(this.app.router);
 }
 
 _.extend(Application.prototype, {
@@ -29,6 +28,10 @@ _.extend(Application.prototype, {
 	startHubs: false,
 
 	initialize: function () {},
+
+	initRouter: function () {
+		this.app.use(this.app.router);
+	},
 
 	_setConfigurations: function () {
 		this.app.set('views', path.join(__dirname, '/app/views'));

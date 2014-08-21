@@ -4,30 +4,30 @@ var utils = require('./utils');
 
 // WebSocket Hub Class
 function Hub (options) {
-	options || (options = {});
+    options || (options = {});
     if (options.app) this.io = options.io;
     if (options.socket) this.socket = options.socket;
-    this._parseCommands();
+    this._parseRoutes();
     this.initialize.apply(this, arguments);
 }
 
 _.extend(Hub.prototype, {
 
-	initialize: function(){},
+    initialize: function(){},
 
-	_parseCommands: function () {
-		if(!this.commands) return;
-		this.commands = _.result(this, 'commands');
-		for (var i = 0; i < this.commands.length; i++) {
-			this._parseCommand(this.commands[i]);
-		};
-	},
+    _parseRoutes: function () {
+        if(!this.routes) return;
+        this.routes = _.result(this, 'routes');
 
-	_parseCommand: function (command) {
-		if(!command.key) return;
-		if(!command.action && !_.isFunction(this[command.action])) return;
-		this.socket.on(command.key, this[command.action].bind(this));
-	}
+        for (var key in this.routes) {
+            this._parseRoute(key);
+        }
+    },
+
+    _parseRoute: function (key) {
+        if(!_.isFunction(this[this.routes[key]])) return;
+        this.socket.on(key, this[this.routes[key]].bind(this));
+    }
 });
 
 Hub.extend = utils.extend;
