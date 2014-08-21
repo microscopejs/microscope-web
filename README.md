@@ -13,25 +13,32 @@ sample:
 ```js
 var Server = Application.extend({
 
-	startHubs: true,
+    startHubs: true,
 
-	initialize: function () {
-		this.initAuthentication();
-		this.run(this.log.bind(this));
-	},
+    initialize: function () {
+        this.initAuthentication();
+        this.initRouter();
+        this.errorHandlers();
+        this.run(this.log.bind(this));
+    },
 
-	middlewares:[
-		flash(),
-		commonsMidlw.locals
-	],
+    middlewares: [
+        flash(),
+        commonsMidlw.locals
+    ],
 
-	initAuthentication: function () {
-		var AuthenticationProvider = new Authentication({app: this.app});
-	},
+    errorHandlers: function () {
+        this.app.use(commonsMidlw.NotFound);
+        this.app.use(commonsMidlw.InternalServerError);
+    },
 
-	log: function () {
-		console.log('microscope application running at port ' + this.port);
-	}
+    initAuthentication: function () {
+        var AuthenticationProvider = new Authentication({app: this.app});
+    },
+
+    log: function () {
+        console.log('microscope application running at port ' + this.port);
+    }
 });
 
 var server = new Server();
@@ -48,24 +55,27 @@ Controller
 
 ```js
 
-module.exports = HomeController = Controller.extend({
+/**
+ * HomeController class.
+ */
+module.exports = BaseController.extend({
 
-    basePath: "/home",
+    baseUrl: "/home",
 
-    routes: [
-        { path: '/', action: 'index', ignoreBasePath: true },
-        { path: '/about', action: 'about'}
-    ],
+    routes: {
+        'get /' : {action: 'index', ignoreBaseUrl: true},
+        'get /about' : 'about'
+    },
 
     // index action.
     index: function(request, response) {
-        response.render('home/index', {'title': 'home controller ' + request.url});
+        response.render('home/index');
     },
 
     // about action.
     about: function (request, response) {
         request.flash('flash', 'test middlewares');
-        response.redirect('/');
+        response.render('home/about');
     }
 });
 
@@ -82,13 +92,13 @@ Hub
 
 module.exports = Hub.extend({
 
-	commands:[
-		{key: '/home', action: 'home'}
-	],
+    routes: {
+        '/home' : 'home'
+    },
 
-	home: function (model) {
-		console.log('message: ' + model);
-	}
+    home: function (model) {
+        console.log('message: ' + model);
+    }
 });
 
 ```
