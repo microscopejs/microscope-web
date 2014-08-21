@@ -27,6 +27,14 @@ _.extend(Application.prototype, {
 	port: 3000,
 	startHubs: false,
 
+	folderConfigs: {
+		publicFolder: null,
+		viewsFolder: null,
+		controllerFolder: null,
+		apiFolder: null,
+		hubFolder: null
+	},
+
 	initialize: function () {},
 
 	initRouter: function () {
@@ -34,7 +42,7 @@ _.extend(Application.prototype, {
 	},
 
 	_setConfigurations: function () {
-		this.app.set('views', path.join(__dirname, '/app/views'));
+		this.app.set('views', this.folderConfigs.viewsFolder);
 		if(this.ejsTags){
 			this.app.locals.open = this.ejsTags.open;
 			this.app.locals.close = this.ejsTags.close;
@@ -53,7 +61,7 @@ _.extend(Application.prototype, {
 		this.app.use(express.errorHandler());
 	    this.app.use(express.cookieParser());
 	    this.app.use(express.methodOverride());
-		this.app.use(express.static(path.join(__dirname, this.publicFolder || 'public')));
+		this.app.use(express.static(this.folderConfigs.publicFolder));
 	    this.app.use(express.session({ secret: this.sessionSecret || 'microscopejs' }));
 	},
 
@@ -84,7 +92,7 @@ _.extend(Application.prototype, {
 		var io = require('socket.io')(server);
 		io.on('connection', function(socket){
 			console.log('a user connected');
-			self._loadModulesFromFolder(__dirname + '/app/hubs/', {io: io, socket: socket});
+			self._loadModulesFromFolder(self.folderConfigs.hubFolder, {io: io, socket: socket});
 			socket.on('disconnect', function(){
 				console.log('user disconnected');
 			});
@@ -93,8 +101,8 @@ _.extend(Application.prototype, {
 
 	// boot controller & api
 	_boot: function () {
-		this._loadModulesFromFolder(__dirname + '/app/api/', {app: this.app});
-		this._loadModulesFromFolder(__dirname + '/app/controllers/', {app: this.app});
+		this._loadModulesFromFolder(this.folderConfigs.apiFolder, {app: this.app});
+		this._loadModulesFromFolder(this.folderConfigs.controllerFolder, {app: this.app});
 	},
 
 	run: function (callback) {
