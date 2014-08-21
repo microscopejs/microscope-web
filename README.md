@@ -13,6 +13,7 @@ sample:
 ```js
 var Server = Application.extend({
 
+    appRoot: __dirname,
     startHubs: true,
 
     initialize: function () {
