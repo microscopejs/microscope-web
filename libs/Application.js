@@ -8,7 +8,7 @@ var _       = require('lodash');
 var express = require('express');
 var engine  = require('ejs-locals');
 var ejs     = require('ejs');
-var utils   = require('utils');
+var utils   = require('./utils');
 
 /**
  * Application class.
