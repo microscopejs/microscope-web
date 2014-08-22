@@ -23,18 +23,24 @@ var Server = Application.extend({
         this.run(this.log.bind(this));
     },
 
+    // call configurations functions with app in param.
+    configurations: [
+        templateEngineProvider
+    ],
+
+    // call this.app.use(myMiddleware)
     middlewares: [
         flash(),
         commonsMidlw.locals
     ],
 
+    initAuthentication: function () {
+        var AuthenticationProvider = new Authentication({app: this.app});
+    },
+
     errorHandlers: function () {
         this.app.use(commonsMidlw.NotFound);
         this.app.use(commonsMidlw.InternalServerError);
-    },
-
-    initAuthentication: function () {
-        var AuthenticationProvider = new Authentication({app: this.app});
     },
 
     log: function () {
@@ -133,3 +139,9 @@ module.exports = AuthenticationProvider.extend({
 });
 
 ```
+
+TODO
+----
+
+* Migrate to express 4.
+* Publish to NPM.

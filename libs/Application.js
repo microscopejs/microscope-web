@@ -16,7 +16,8 @@ var utils   = require('utils');
 function Application (options) {
 	options || (options = {});
 	this.app = express();
-	this._setConfigurations();
+	this._registerBaseConfigurations();
+	this._registerConfigurations();
 	this._registerBaseMiddlewares();
 	this._registerMiddlewares();
 	this.initialize.apply(this, arguments);
@@ -42,16 +43,20 @@ _.extend(Application.prototype, {
 		this.app.use(this.app.router);
 	},
 
-	_setConfigurations: function () {
-		this.app.set('views', path.join(this.appRoot, this.folderConfigs.viewsFolder));
-		if(this.ejsTags){
-			this.app.locals.open = this.ejsTags.open;
-			this.app.locals.close = this.ejsTags.close;
-		}
-		this.app.set('view engine', 'ejs');
-		this.app.set('layout', 'layout');
-		this.app.engine('ejs', engine);
-    	this.app.locals({_layoutFile: true});
+	_registerBaseConfigurations: function(){
+		this.app.set('publicFolder', path.join(this.appRoot, this.folderConfigs.publicFolder));
+		this.app.set('viewsFolder', path.join(this.appRoot, this.folderConfigs.viewsFolder));
+		this.app.set('controllerFolder', path.join(this.appRoot, this.folderConfigs.controllerFolder));
+		this.app.set('apiFolder', path.join(this.appRoot, this.folderConfigs.apiFolder));
+		this.app.set('hubFolder', path.join(this.appRoot, this.folderConfigs.hubFolder));
+	},
+
+	_registerConfigurations: function () {
+		if(!this.configurations) return;
+		this.configurations = _.result(this, 'configurations');
+		for (var i = 0; i < this.configurations.length; i++) {
+			this.configurations[i](this.app);
+		};
 	},
 
 	_registerBaseMiddlewares: function () {
