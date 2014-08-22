@@ -5,7 +5,7 @@ var utils = require('./utils');
 // WebSocket Hub Class
 function Hub (options) {
     options || (options = {});
-    if (options.app) this.io = options.io;
+    if (options.io) this.io = options.io;
     if (options.socket) this.socket = options.socket;
     this._parseRoutes();
     this.initialize.apply(this, arguments);
