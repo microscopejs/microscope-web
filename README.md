@@ -97,14 +97,23 @@ Hub
 
 ```js
 
-module.exports = Hub.extend({
+module.exports = HomeHub = Hub.extend({
 
     routes: {
-        '/home' : 'home'
+        'log' : 'log',
+        'message'   : 'message'
     },
 
-    home: function (model) {
-        console.log('message: ' + model);
+    // log in terminal message received.
+    log: function (model) {
+        console.log('log: ' + model);
+        this.socket.emit('log', 'message received');
+    },
+
+    // broadcast message to everyone connected.
+    message: function (model) {
+        console.log('message for everyone: ' + model);
+        this.io.sockets.emit('message', model);
     }
 });
 
