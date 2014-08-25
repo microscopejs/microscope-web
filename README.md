@@ -11,6 +11,12 @@ Application
 sample:
 
 ```js
+
+/**
+ * Imports.
+ */
+var Controller = require('microscope-web').Application;
+
 var Server = Application.extend({
 
     appRoot: __dirname,
@@ -63,9 +69,14 @@ Controller
 ```js
 
 /**
+ * Imports.
+ */
+var Controller = require('microscope-web').Controller;
+
+/**
  * HomeController class.
  */
-module.exports = BaseController.extend({
+module.exports = Controller.extend({
 
     baseUrl: "/home",
 
@@ -96,6 +107,10 @@ Hub
 ####sample:
 
 ```js
+/**
+ * Imports.
+ */
+var Controller = require('microscope-web').Hub;
 
 module.exports = HomeHub = Hub.extend({
 
@@ -125,6 +140,11 @@ AuthenticationProvider
 > Authentication providers configuration class
 
 ```js
+
+/**
+ * Imports.
+ */
+var Controller = require('microscope-web').Authentication;
 
 // Imports
 var localStrategy  = require('./strategies/localStrategy');
