@@ -15,8 +15,12 @@ sample:
 /**
  * Imports.
  */
-var Controller = require('microscope-web').Application;
+var Controller             = require('microscope-web').Application;
+var AuthenticationProvider = require('microscope-web').AuthenticationProvider;
 
+/**
+ * Server
+ */
 var Server = Application.extend({
 
     appRoot: __dirname,
@@ -41,7 +45,7 @@ var Server = Application.extend({
     ],
 
     initAuthentication: function () {
-        var AuthenticationProvider = new Authentication({app: this.app});
+        var AuthenticationProvider = new AuthenticationProvider({app: this.app});
     },
 
     errorHandlers: function () {
@@ -144,13 +148,13 @@ AuthenticationProvider
 /**
  * Imports.
  */
-var Controller = require('microscope-web').Authentication;
+var Controller = require('microscope-web').AuthenticationProvider;
 
 // Imports
 var localStrategy  = require('./strategies/localStrategy');
 var googleStrategy = require('./strategies/googleStrategy');
 
-// Authentication class
+// AuthenticationProvider class
 module.exports = AuthenticationProvider.extend({
 
     serialize: function(user, done) {
