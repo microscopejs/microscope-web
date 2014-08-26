@@ -15,8 +15,8 @@ function Application (options) {
 	options || (options = {});
 	this.app = express();
 	this._registerBaseConfigurations();
-	this._registerConfigurations();
 	this._registerBaseMiddlewares();
+	this._registerConfigurations();
 	this._registerMiddlewares();
 	this.initialize.apply(this, arguments);
 }
