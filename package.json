@@ -1,12 +1,11 @@
 {
   "name": "microscope-web",
-  "version": "0.0.1",
-  "private": true,
+  "description": "microscope-web librairies beta",
+  "version": "0.0.2",
   "scripts": {},
   "dependencies": {
     "express": "3.1.0",
     "lodash": "~2.4.1",
-    "passport": "^0.2.0",
     "socket.io": "^1.0.4"
   },
   "devDependencies": {
