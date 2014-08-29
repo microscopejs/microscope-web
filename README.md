@@ -13,13 +13,17 @@ sample:
 ```js
 
 /**
- * Imports.
+ * Imports
  */
-var Controller             = require('microscope-web').Application;
-var AuthenticationProvider = require('microscope-web').AuthenticationProvider;
+var path                   = require('path');
+var Application            = require('microscope-web').Application;
+var flash                  = require('connect-flash');
+var commonsMidlw           = require('./middlewares/commons');
+var authenticationProvider = require('./middlewares/authenticationProvider');
+var templateEngineProvider = require('./middlewares/templateEngineProvider');
 
 /**
- * Server
+ * microscope application.
  */
 var Server = Application.extend({
 
@@ -27,26 +31,20 @@ var Server = Application.extend({
     startHubs: true,
 
     initialize: function () {
-        this.initAuthentication();
         this.initRouter();
         this.errorHandlers();
         this.run(this.log.bind(this));
     },
 
-    // call configurations functions with app in param.
     configurations: [
-        templateEngineProvider
+        templateEngineProvider,
+        authenticationProvider
     ],
 
-    // call this.app.use(myMiddleware)
     middlewares: [
         flash(),
         commonsMidlw.locals
     ],
-
-    initAuthentication: function () {
-        var AuthenticationProvider = new AuthenticationProvider({app: this.app});
-    },
 
     errorHandlers: function () {
         this.app.use(commonsMidlw.NotFound);
@@ -119,7 +117,7 @@ var Controller = require('microscope-web').Hub;
 module.exports = HomeHub = Hub.extend({
 
     routes: {
-        'log' : 'log',
+        'log'       : 'log',
         'message'   : 'message'
     },
 
@@ -134,41 +132,6 @@ module.exports = HomeHub = Hub.extend({
         console.log('message for everyone: ' + model);
         this.io.sockets.emit('message', model);
     }
-});
-
-```
-
-AuthenticationProvider
-----------------------
-
-> Authentication providers configuration class
-
-```js
-
-/**
- * Imports.
- */
-var Controller = require('microscope-web').AuthenticationProvider;
-
-// Imports
-var localStrategy  = require('./strategies/localStrategy');
-var googleStrategy = require('./strategies/googleStrategy');
-
-// AuthenticationProvider class
-module.exports = AuthenticationProvider.extend({
-
-    serialize: function(user, done) {
-        done(null, user);
-    },
-
-    deserialize: function(obj, done) {
-        done(null, obj);
-    },
-
-    strategies: [
-        localStrategy,
-        googleStrategy
-    ]
 });
 
 ```
