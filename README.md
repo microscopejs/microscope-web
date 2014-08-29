@@ -141,4 +141,3 @@ TODO
 
 * Add room management in Hub class.
 * Migrate to express 4.
-* Publish to NPM.
