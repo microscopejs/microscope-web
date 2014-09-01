@@ -80,9 +80,7 @@ _.extend(Application.prototype, {
 	_loadModulesFromFolder: function (folderpath, options) {
 		var self = this;
 		fs.readdir(folderpath, function (err, files) {
-			if (err) {
-				return;
-			}
+			if (err) { return; }
 			files.forEach(function (file) {
 				if (path.extname(file) === '.js') {
 					var Module = require(folderpath + file);
