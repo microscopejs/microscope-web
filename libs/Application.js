@@ -80,8 +80,7 @@ _.extend(Application.prototype, {
 	_loadModulesFromFolder: function (folderpath, options) {
 		var self = this;
 		fs.readdir(folderpath, function (err, files) {
-			if (err) { 
-				console.log(err);
+			if (err) {
 				return;
 			}
 			files.forEach(function (file) {

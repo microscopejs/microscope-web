@@ -75,6 +75,8 @@ _.extend(Controller.prototype, {
                 return;
             }
 
+            if(!callback){ return; }
+
             if (this.baseUrl && match[2] === '/') {
                 this.app[verb](this.baseUrl, filters, callback.bind(this));
             }
