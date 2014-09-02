@@ -108,7 +108,7 @@ _.extend(Application.prototype, {
 	run: function (callback) {
 		var port = this.port || process.env.PORT;
 
-		this.app.listen(port, function() {
+		var server = this.app.listen(port, function() {
   			if(callback) callback();
 		});
 
