@@ -1,8 +1,10 @@
 /**
  * Imports
  */
-var _     = require('lodash');
-var utils = require('./utils');
+var _       = require('lodash');
+var utils   = require('./utils');
+var express = require('express');
+var router  = express.Router();
 
 /**
  * Controller constructor
@@ -11,9 +13,13 @@ var utils = require('./utils');
 var Controller = function(options) {
     options || (options = {});
     if (options.routes) this.routes = options.routes;
-    if (options.app) this.app = options.app;
+    if (options.app) {
+        this.app = options.app;
+    };
+    this.router = router;
     this._parseFilters();
     this._parseRoutes();
+    this.app.use(this.router);
     this.initialize.apply(this, arguments);
 }
 
@@ -78,10 +84,10 @@ _.extend(Controller.prototype, {
             if(!callback){ return; }
 
             if (this.baseUrl && match[2] === '/') {
-                this.app[verb](this.baseUrl, filters, callback.bind(this));
+                this.router[verb](this.baseUrl, filters, callback.bind(this));
             }
 
-            this.app[verb](url, filters, callback.bind(this));
+            this.router[verb](url, filters, callback.bind(this));
         }
     },
 
@@ -94,7 +100,9 @@ _.extend(Controller.prototype, {
         if (!this.filters) return;
 
         this.filters = _.result(this, 'filters') || [];
-        this.app.all(this.baseUrl + '*', this.filters);
+        for (var i = 0; i < this.filters.length; i++) {
+            this.router.use(this.filters[i]);
+        };
     }
 });
 
