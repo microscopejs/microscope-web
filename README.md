@@ -17,8 +17,8 @@ sample:
  */
 var path                   = require('path');
 var Application            = require('microscope-web').Application;
-var flash                  = require('connect-flash');
 var commonsMidlw           = require('./middlewares/commons');
+var errorsMidlw            = require('./middlewares/errors');
 var authenticationProvider = require('./middlewares/authenticationProvider');
 var templateEngineProvider = require('./middlewares/templateEngineProvider');
 
@@ -31,24 +31,20 @@ var Server = Application.extend({
     startHubs: true,
 
     initialize: function () {
-        this.initRouter();
         this.errorHandlers();
         this.run(this.log.bind(this));
     },
 
-    configurations: [
+    middlewares: [
+        commonsMidlw.defaults,
+        commonsMidlw.locals,
         templateEngineProvider,
         authenticationProvider
     ],
 
-    middlewares: [
-        flash(),
-        commonsMidlw.locals
-    ],
-
     errorHandlers: function () {
-        this.app.use(commonsMidlw.NotFound);
-        this.app.use(commonsMidlw.InternalServerError);
+        this.app.use(errorsMidlw.NotFound);
+        this.app.use(errorsMidlw.InternalServerError);
     },
 
     log: function () {
@@ -56,7 +52,7 @@ var Server = Application.extend({
     }
 });
 
-var server = new Server();
+module.exports = Server;
 
 ```
 

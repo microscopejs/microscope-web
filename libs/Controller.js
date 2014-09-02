@@ -100,9 +100,7 @@ _.extend(Controller.prototype, {
         if (!this.filters) return;
 
         this.filters = _.result(this, 'filters') || [];
-        for (var i = 0; i < this.filters.length; i++) {
-            this.router.use(this.filters[i]);
-        };
+        this.router.all(this.baseUrl + '*', this.filters);
     }
 });
 

@@ -23,7 +23,6 @@ function Application (options) {
 	this.app = express();
 	this._registerBaseConfigurations();
 	this._registerBaseMiddlewares();
-	this._registerConfigurations();
 	this._registerMiddlewares();
 	this._boot();
 	this.initialize.apply(this, arguments);
@@ -53,14 +52,6 @@ _.extend(Application.prototype, {
 		this.app.set('hubFolder', path.join(this.appRoot, this.folderConfigs.hubFolder));
 	},
 
-	_registerConfigurations: function () {
-		if(!this.configurations) return;
-		this.configurations = _.result(this, 'configurations');
-		for (var i = 0; i < this.configurations.length; i++) {
-			this.configurations[i](this.app);
-		};
-	},
-
 	_registerBaseMiddlewares: function () {
 		this.app.use(favicon());
 		this.app.use(logger('dev'));
@@ -75,7 +66,7 @@ _.extend(Application.prototype, {
 		if(!this.middlewares) return;
 		this.middlewares = _.result(this, 'middlewares');
 		for (var i = 0; i < this.middlewares.length; i++) {
-			this.app.use(this.middlewares[i]);
+			this.middlewares[i](this.app);
 		};
 	},
 
@@ -116,13 +107,14 @@ _.extend(Application.prototype, {
 
 	run: function (callback) {
 		var port = this.port || process.env.PORT;
-		var server = http.createServer(this.app).listen(port, function () {
-			if(callback) callback();
+
+		this.app.listen(port, function() {
+  			if(callback) callback();
 		});
+
 		if(this.startHubs){
 			this._loadSocketServer(server);
 		}
-		return server;
 	}
 });
 
