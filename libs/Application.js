@@ -21,6 +21,7 @@ var utils          = require('./utils');
 function Application (options) {
 	options || (options = {});
 	this.app = express();
+	this.app.set('env', this.environment || 'dev');
 	this._registerBaseConfigurations();
 	this._registerBaseMiddlewares();
 	this._registerMiddlewares();
