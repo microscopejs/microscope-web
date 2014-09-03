@@ -15,7 +15,6 @@ sample:
 /**
  * Imports
  */
-var path                   = require('path');
 var Application            = require('microscope-web').Application;
 var commonsMidlw           = require('./middlewares/commons');
 var errorsMidlw            = require('./middlewares/errors');
@@ -29,6 +28,8 @@ var Server = Application.extend({
 
     appRoot: __dirname,
     startHubs: true,
+    environment: 'dev', // this.app.set('env', 'dev');
+    port: 5555,
 
     initialize: function () {
         this.errorHandlers();
@@ -43,8 +44,7 @@ var Server = Application.extend({
     ],
 
     errorHandlers: function () {
-        this.app.use(errorsMidlw.NotFound);
-        this.app.use(errorsMidlw.InternalServerError);
+        errorsMidlw(this.app);
     },
 
     log: function () {
