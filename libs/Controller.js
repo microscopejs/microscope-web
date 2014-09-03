@@ -3,8 +3,6 @@
  */
 var _       = require('lodash');
 var utils   = require('./utils');
-var express = require('express');
-var router  = express.Router();
 
 /**
  * Controller constructor
@@ -16,10 +14,8 @@ var Controller = function(options) {
     if (options.app) {
         this.app = options.app;
     };
-    this.router = router;
     this._parseFilters();
     this._parseRoutes();
-    this.app.use(this.router);
     this.initialize.apply(this, arguments);
 }
 
@@ -40,67 +36,84 @@ _.extend(Controller.prototype, {
         this.baseUrl = _.result(this, 'baseUrl');
 
         for (var key in this.routes) {
-            this._bindRoute(key);
+            this._parseRoute(key);
         }
     },
 
-    _bindRoute: function(routeKey) {
+    _parseRoute: function (routeKey) {
         var delegateEventSplitter = /^(\S+)\s*(.*)$/;
         var match  = routeKey.match(delegateEventSplitter);
         var verb   = match[1],
             url    = match[2],
             value  = this.routes[routeKey];
 
+        if(!_.contains(this.acceptVerb, verb)){ return; }
+
         var filters = [];
         var callback;
+        var route = {
+            ignoreBaseUrl: false
+        };
 
-        if(this.baseUrl){
-            url = this.baseUrl + url;
+        if(_.isFunction(value)){
+            callback = value;
+        }
+        else if(_.isString(value)){
+            if(_.isFunction(this[value])){
+                callback = this[value];
+            }
+        }
+        else if(_.isObject(value)){
+            filters = value.filters || [];
+            if(_.isFunction(this[value.action])){
+                callback = this[value.action];
+            }
+            if(value.ignoreBaseUrl){
+                route.ignoreBaseUrl = value.ignoreBaseUrl;
+            }
+        }else{
+            console.log('invalid routes values');
+            return;
         }
 
-        if (_.contains(this.acceptVerb, verb)) {
+        if(!callback){ return; }
+        if(!url){ return; }
+        if(!filters){ return; }
+        if(!verb){ return; }
 
-            if(_.isFunction(value)){
-                callback = value;
-            }
-            else if(_.isString(value)){
-                if(_.isFunction(this[value])){
-                    callback = this[value];
-                }
-            }
-            else if(_.isObject(value)){
-                filters = value.filters || [];
-                if(_.isFunction(this[value.action])){
-                    callback = this[value.action];
-                }
-                if(value.ignoreBaseUrl){
-                    url = match[2];
-                }
-            }else{
-                console.log('invalid routes values');
-                return;
-            }
+        route.verb = verb;
+        route.url = url;
+        route.filters = filters;
+        route.callback = callback;
 
-            if(!callback){ return; }
+        this._bindRoute(route);
+    },
 
-            if (this.baseUrl && match[2] === '/') {
-                this.router[verb](this.baseUrl, filters, callback.bind(this));
+    _bindRoute: function(route) {
+        var filters = this.filters || [];
+        var url = route.url;
+
+        filters = _.union(filters, route.filters);
+        if(this.baseUrl){ url = this.baseUrl + url; }
+
+        if(route.ignoreBaseUrl){
+            this.app[route.verb](route.url, filters, route.callback.bind(this));
+
+            if(route.url === '/'){
+                this.app[route.verb](url, filters, route.callback.bind(this));
             }
-
-            this.router[verb](url, filters, callback.bind(this));
+        }else{
+            this.app[route.verb](url, filters, route.callback.bind(this));
         }
     },
 
     /**
-     * parse controller filter and add to global controller route.
+     * parse controller filter.
      */
     _parseFilters: function() {
         if (!this.app) return;
-        if (!this.baseUrl) return;
         if (!this.filters) return;
-
         this.filters = _.result(this, 'filters') || [];
-        this.router.all(this.baseUrl + '*', this.filters);
     }
 });
 
