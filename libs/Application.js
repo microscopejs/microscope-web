@@ -91,13 +91,21 @@ _.extend(Application.prototype, {
 		var self = this;
 		var io = require('socket.io')(server);
 		io.on('connection', function(socket){
-			console.log('a user connected');
+			self.onConnection(io, socket);
 			self._loadModulesFromFolder(
 				path.join(self.appRoot, self.folderConfigs.hubFolder), {io: io, socket: socket});
-			socket.on('disconnect', function(){
-				console.log('user disconnected');
+			socket.on('disconnect', function () {
+				self.onDisconnect(io, socket);
 			});
 		});
+	},
+
+	onConnection: function () {
+		console.log('a user connected');
+	},
+
+	onDisconnect: function () {
+		console.log('user disconnected');
 	},
 
 	// boot controller & api
