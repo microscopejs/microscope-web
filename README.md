@@ -106,27 +106,34 @@ Hub
 
 ```js
 /**
- * Imports.
+ * Imports
  */
-var Controller = require('microscope-web').Hub;
+var Hub = require('microscope-web').Hub;
 
+/**
+ * Home hub
+ * Simple chat hub with room.
+ */
 module.exports = HomeHub = Hub.extend({
 
+    namespace: '/chat',
+    rooms: [],
+
     routes: {
-        'log'       : 'log',
-        'message'   : 'message'
+        'choose room' : 'chooseRoom',
+        'message'     : 'message'
     },
 
-    // log in terminal message received.
-    log: function (model) {
-        console.log('log: ' + model);
-        this.socket.emit('log', 'message received');
+    chooseRoom: function (data) {
+        this.rooms.push(data.room);
+        this.socket.room = data.room;
+        this.socket.user = data.user;
+        this.socket.join(data.room);
+        this.socket.emit('join', this.socket.room);
     },
 
-    // broadcast message to everyone connected.
-    message: function (model) {
-        console.log('message for everyone: ' + model);
-        this.io.sockets.emit('message', model);
+    message: function (msg) {
+        this.io.of(this.namespace).to(this.socket.room).emit('message', {user: this.socket.user, msg: msg});
     }
 });
 
@@ -135,5 +142,4 @@ module.exports = HomeHub = Hub.extend({
 TODO
 ----
 
-* Add room management in Hub class.
-* Migrate to express 4.
+* add function helpers to Hub class & Controller.
