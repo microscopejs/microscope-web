@@ -90,22 +90,8 @@ _.extend(Application.prototype, {
 	_loadSocketServer: function (server) {
 		var self = this;
 		var io = require('socket.io')(server);
-		io.on('connection', function(socket){
-			self.onConnection(io, socket);
-			self._loadModulesFromFolder(
-				path.join(self.appRoot, self.folderConfigs.hubFolder), {io: io, socket: socket});
-			socket.on('disconnect', function () {
-				self.onDisconnect(io, socket);
-			});
-		});
-	},
-
-	onConnection: function () {
-		console.log('a user connected');
-	},
-
-	onDisconnect: function () {
-		console.log('user disconnected');
+		self._loadModulesFromFolder(
+				path.join(self.appRoot, self.folderConfigs.hubFolder), {io: io});
 	},
 
 	// boot controller & api
@@ -115,15 +101,16 @@ _.extend(Application.prototype, {
 	},
 
 	run: function (callback) {
+		var self = this;
 		var port = this.port || process.env.PORT;
 
 		var server = this.app.listen(port, function() {
+			if(self.startHubs){
+				self._loadSocketServer(server);
+			}
   			if(callback) callback();
 		});
 
-		if(this.startHubs){
-			this._loadSocketServer(server);
-		}
 	}
 });
 

@@ -1,7 +1,7 @@
 {
   "name": "microscope-web",
   "description": "microscope-web librairies beta",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "scripts": {},
   "dependencies": {
     "lodash": "~2.4.1",
