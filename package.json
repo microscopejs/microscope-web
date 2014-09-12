@@ -1,17 +1,12 @@
 {
   "name": "microscope-web",
   "description": "microscope-web librairies beta",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "scripts": {},
   "dependencies": {
     "lodash": "~2.4.1",
     "socket.io": "^1.0.4",
-    "express": "~4.8.7",
-    "static-favicon": "~1.0.0",
-    "morgan": "~1.0.0",
-    "cookie-parser": "~1.0.1",
-    "body-parser": "~1.0.0",
-    "method-override": "^2.1.2"
+    "express": "~4.8.7"
   },
   "devDependencies": {
     "mocha": "~1.12.1",

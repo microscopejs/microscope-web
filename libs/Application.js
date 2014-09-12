@@ -4,14 +4,7 @@
 var fs             = require('fs');
 var path           = require('path');
 var http           = require('http');
-
 var express        = require('express');
-var favicon        = require('static-favicon');
-var logger         = require('morgan');
-var cookieParser   = require('cookie-parser');
-var bodyParser     = require('body-parser');
-var methodOverride = require('method-override');
-
 var _              = require('lodash');
 var utils          = require('./utils');
 
@@ -23,7 +16,6 @@ function Application (options) {
 	this.app = express();
 	this.app.set('env', this.environment || 'dev');
 	this._registerBaseConfigurations();
-	this._registerBaseMiddlewares();
 	this._registerMiddlewares();
 	this._boot();
 	this.initialize.apply(this, arguments);
@@ -51,16 +43,6 @@ _.extend(Application.prototype, {
 		this.app.set('controllerFolder', path.join(this.appRoot, this.folderConfigs.controllerFolder));
 		this.app.set('apiFolder', path.join(this.appRoot, this.folderConfigs.apiFolder));
 		this.app.set('hubFolder', path.join(this.appRoot, this.folderConfigs.hubFolder));
-	},
-
-	_registerBaseMiddlewares: function () {
-		this.app.use(favicon());
-		this.app.use(logger('dev'));
-		this.app.use(bodyParser.json());
-		this.app.use(bodyParser.urlencoded({ extended: true }));
-		this.app.use(cookieParser());
-		this.app.use(methodOverride());
-		this.app.use(express.static(path.join(this.appRoot, this.folderConfigs.publicFolder)));
 	},
 
 	_registerMiddlewares: function () {
