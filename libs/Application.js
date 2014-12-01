@@ -1,12 +1,13 @@
 /**
 * Imports.
 */
-var fs             = require('fs');
-var path           = require('path');
-var http           = require('http');
-var express        = require('express');
-var _              = require('lodash');
-var utils          = require('./utils');
+var fs      = require('fs');
+var path    = require('path');
+var http    = require('http');
+var express = require('express');
+var IO      = require('socket.io')
+var _       = require('lodash');
+var utils   = require('./utils');
 
 /**
  * Application class.
@@ -14,8 +15,7 @@ var utils          = require('./utils');
 function Application (options) {
 	options || (options = {});
 	this.app = express();
-	this.app.set('env', this.environment || 'dev');
-	this._registerBaseConfigurations();
+	this._registerConfigurations();
 	this._registerMiddlewares();
 	this._boot();
 	this.initialize.apply(this, arguments);
@@ -23,26 +23,29 @@ function Application (options) {
 
 _.extend(Application.prototype, {
 
-	port: 3000,
 	appRoot: null,
+	port: 3000,
 	startHubs: false,
 
-	folderConfigs: {
-		publicFolder: '/public/',
-		viewsFolder: '/app/views/',
-		controllerFolder: '/app/controllers/',
-		apiFolder: '/app/api/',
-		hubFolder: '/app/hubs/'
+	configurations: {
+		env: 'dev'
 	},
+
+	controllersRoot: [
+		'/app/controllers/',
+		'/app/api/'
+	],
+
+	hubsRoot: [
+		'/app/hubs/'
+	],
 
 	initialize: function () {},
 
-	_registerBaseConfigurations: function(){
-		this.app.set('publicFolder', path.join(this.appRoot, this.folderConfigs.publicFolder));
-		this.app.set('viewsFolder', path.join(this.appRoot, this.folderConfigs.viewsFolder));
-		this.app.set('controllerFolder', path.join(this.appRoot, this.folderConfigs.controllerFolder));
-		this.app.set('apiFolder', path.join(this.appRoot, this.folderConfigs.apiFolder));
-		this.app.set('hubFolder', path.join(this.appRoot, this.folderConfigs.hubFolder));
+	_registerConfigurations: function(){
+		for(var key in this.configurations){
+			this.app.set(key, this.configurations[key]);
+		}
 	},
 
 	_registerMiddlewares: function () {
@@ -70,16 +73,20 @@ _.extend(Application.prototype, {
 
 	// boot socket server
 	_loadSocketServer: function (server) {
-		var self = this;
-		var io = require('socket.io')(server);
-		self._loadModulesFromFolder(
-				path.join(self.appRoot, self.folderConfigs.hubFolder), {io: io});
+		var io = IO(server);
+
+		for (var i = 0; i < this.hubsRoot.length; i++) {
+			var ctrlPath = path.join(this.appRoot, this.hubsRoot[i]);
+			this._loadModulesFromFolder(ctrlPath, {io: io});
+		};
 	},
 
 	// boot controller & api
 	_boot: function () {
-		this._loadModulesFromFolder(path.join(this.appRoot, this.folderConfigs.apiFolder), {app: this.app});
-		this._loadModulesFromFolder(path.join(this.appRoot, this.folderConfigs.controllerFolder), {app: this.app});
+		for (var i = 0; i < this.controllersRoot.length; i++) {
+			var ctrlPath = path.join(this.appRoot, this.controllersRoot[i]);
+			this._loadModulesFromFolder(ctrlPath, {app: this.app});
+		};
 	},
 
 	run: function (callback) {
@@ -92,7 +99,10 @@ _.extend(Application.prototype, {
 			}
   			if(callback) callback();
 		});
+	},
 
+	mount: function () {
+		return this.app;
 	}
 });
 
