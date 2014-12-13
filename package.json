@@ -1,11 +1,10 @@
 {
   "name": "microscope-web",
-  "description": "microscope-web librairies beta",
-  "version": "0.0.11",
+  "description": "microscope-web HttpApplication class and controller",
+  "version": "0.1.0",
   "scripts": {},
   "dependencies": {
     "lodash": "~2.4.1",
-    "socket.io": "^1.0.4",
     "express": "~4.8.7"
   },
   "devDependencies": {

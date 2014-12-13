@@ -1,10 +1,10 @@
 microscope-web
 ==============
 
-microscope V1 web framework librairies.
+microscope web framework class.
 
-Application
------------
+HttpApplication
+---------------
 
 > microscope web application server.
 
@@ -12,49 +12,70 @@ sample:
 
 ```js
 
-/**
- * Imports
- */
-var Application            = require('microscope-web').Application;
-var commonsMidlw           = require('./middlewares/commons');
-var errorsMidlw            = require('./middlewares/errors');
-var authenticationProvider = require('./middlewares/authenticationProvider');
-var templateEngineProvider = require('./middlewares/templateEngineProvider');
+// Imports
+var HttpApplication = require('microscope-web').HttpApplication;
+var logIp           = require('./middlewares/logIp').logIp;
 
 /**
- * microscope application.
+ * HttpApllication class example
  */
-var Server = Application.extend({
-
+var Application = HttpApplication.extend({
+    port:3000,
     appRoot: __dirname,
-    startHubs: true,
-    environment: 'dev', // this.app.set('env', 'dev');
-    port: 5555,
+    middlewares: [ logIp ],
 
-    initialize: function () {
-        this.errorHandlers();
-        this.run(this.log.bind(this));
-    },
-
-    middlewares: [
-        commonsMidlw.defaults,
-        commonsMidlw.locals,
-        templateEngineProvider,
-        authenticationProvider
-    ],
-
-    errorHandlers: function () {
-        errorsMidlw(this.app);
-    },
-
-    log: function () {
-        console.log('microscope application running at port ' + this.port);
-    }
+    initialize: function () {}
 });
 
-module.exports = Server;
+module.exports = Application;
 
 ```
+
+#### HttpApplication API
+
+##### appRoot (required) - string
+    
+    Directory name of application.
+
+##### port - integer
+
+    HTTP server port.
+
+##### configurations - object
+
+    set express app configuration : app.set(key, value);
+
+##### controllersRoot - array
+
+    folder paths for controller class files.
+
+##### initialize - function
+
+    initialize function called in constructor
+
+##### _registerConfigurations - function
+
+    private - set express app configurations
+
+##### _loadModulesFromFolder - function
+
+    private - instantiate class in folders
+
+##### _boot - function
+
+    private - instantiate controllers class
+
+##### run - function
+
+    run http server
+
+##### createServer - function
+
+    alias for run
+
+##### mount - function
+
+    return express application as middleware
 
 
 Controller
@@ -96,50 +117,3 @@ module.exports = Controller.extend({
 });
 
 ```
-
-Hub
----
-
-> Websocket controllers.
-
-####sample:
-
-```js
-/**
- * Imports
- */
-var Hub = require('microscope-web').Hub;
-
-/**
- * Home hub
- * Simple chat hub with room.
- */
-module.exports = HomeHub = Hub.extend({
-
-    namespace: '/chat',
-    rooms: [],
-
-    routes: {
-        'choose room' : 'chooseRoom',
-        'message'     : 'message'
-    },
-
-    chooseRoom: function (data) {
-        this.rooms.push(data.room);
-        this.socket.room = data.room;
-        this.socket.user = data.user;
-        this.socket.join(data.room);
-        this.socket.emit('join', this.socket.room);
-    },
-
-    message: function (msg) {
-        this.io.of(this.namespace).to(this.socket.room).emit('message', {user: this.socket.user, msg: msg});
-    }
-});
-
-```
-
-TODO
-----
-
-* add function helpers to Hub class & Controller.
