@@ -1,5 +1,5 @@
 // Imports
-var Controller = require('../../libs/Controller');
+var Controller = require('../../../libs/Controller');
 
 /**
  * HomeController
