@@ -13,7 +13,7 @@ sample:
 ```js
 
 // Imports
-var HttpApplication  = require('../../libs/HttpApplication');
+var HttpApplication  = require('microscope-web').HttpApplication;
 var AuthApplication  = require('../auth/AuthApplication');
 var logIp            = require('./middlewares/logIp').logIp;
 
