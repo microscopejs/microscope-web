@@ -17,6 +17,7 @@ function HttpApplication (options) {
 	this._registerConfigurations();
 	this._registerMiddlewares();
 	this._boot();
+	this._registerAreas();
 	this.initialize.apply(this, arguments);
 }
 
@@ -32,6 +33,8 @@ _.extend(HttpApplication.prototype, {
 	configurations: {
 		env: 'dev'
 	},
+
+	areas: {},
 
 	/**
 	 * controllers root folders
@@ -62,6 +65,12 @@ _.extend(HttpApplication.prototype, {
 		for (var i = 0; i < this.middlewares.length; i++) {
 			this.middlewares[i](this.app);
 		};
+	},
+
+	_registerAreas: function () {
+		for(var key in this.areas){
+			this.app.use(key, this.areas[key]);
+		}
 	},
 
 	/**

@@ -13,8 +13,11 @@ sample:
 ```js
 
 // Imports
-var HttpApplication = require('microscope-web').HttpApplication;
-var logIp           = require('./middlewares/logIp').logIp;
+var HttpApplication  = require('../../libs/HttpApplication');
+var AuthApplication  = require('../auth/AuthApplication');
+var logIp            = require('./middlewares/logIp').logIp;
+
+var authApplication = new AuthApplication();
 
 /**
  * HttpApllication class example
@@ -22,9 +25,12 @@ var logIp           = require('./middlewares/logIp').logIp;
 var Application = HttpApplication.extend({
     port:3000,
     appRoot: __dirname,
-    middlewares: [ logIp ],
 
-    initialize: function () {}
+    areas: {
+        '/auth': authApplication.mount()
+    },
+
+    middlewares: [ logIp ]
 });
 
 module.exports = Application;
@@ -45,6 +51,11 @@ module.exports = Application;
 
     set express app configuration : app.set(key, value);
 
+##### areas - object
+
+    object definition for HttpApplication areas.
+    key : baseRoute, value: other HttpApplication.mount()
+
 ##### controllersRoot - array
 
     folder paths for controller class files.
@@ -56,6 +67,10 @@ module.exports = Application;
 ##### _registerConfigurations - function
 
     private - set express app configurations
+
+##### _registerAreas - function
+
+    private - register other HttpApplication as area.
 
 ##### _loadModulesFromFolder - function
 

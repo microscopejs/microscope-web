@@ -12,8 +12,8 @@ var Application = HttpApplication.extend({
 	port:3000,
 	appRoot: __dirname,
 
-	initialize: function () {
-		this.app.use('/auth', authApplication.mount());
+	areas: {
+		'/auth': authApplication.mount()
 	},
 
 	middlewares: [ logIp ]
