@@ -1,5 +1,5 @@
-microscope-web (ES6)
-====================
+microscope-web
+==============
 
 ES6, Express/Connect fully compatible, POO & Modular Web framework.
 
