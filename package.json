@@ -1,10 +1,14 @@
 {
   "name": "microscope-web",
-  "description": "microscope-web HttpApplication class and controller",
-  "version": "0.2.0",
+  "version": "0.2.1",
+  "description": "microscope-web HttpApplication and Controller class",
   "main": "index.js",
   "scripts": {
     "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microscopejs/microscope-web.git"
   },
   "dependencies": {
     "express": "^4.12.2",
@@ -16,5 +20,19 @@
     "gulp-docco": "0.0.4",
     "gulp-jshint": "^1.9.2",
     "jshint-stylish": "^1.0.0"
-  }
+  },
+  "keywords": [
+    "Web",
+    "ES6",
+    "http",
+    "express",
+    "MVC",
+    "POO"
+  ],
+  "author": "Benjamin Heintz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/microscopejs/microscope-web/issues"
+  },
+  "homepage": "https://github.com/microscopejs/microscope-web"
 }
