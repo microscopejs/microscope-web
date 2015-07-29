@@ -1,0 +1,9 @@
+require("babel/register")({
+	stage: 1
+});
+var Application =  require('../Application');
+
+var a = new Application();
+a.run(function(){
+	console.log('application running');
+});
