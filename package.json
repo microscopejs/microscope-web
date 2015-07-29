@@ -1,7 +1,7 @@
 {
   "name": "microscope-web",
   "version": "0.2.1",
-  "description": "microscope-web HttpApplication and Controller class",
+  "description": "ES6, Express/Connect fully compatible, POO & Modular Web framework",
   "main": "index.js",
   "scripts": {
     "test": "gulp test"
