@@ -3,9 +3,9 @@ microscope-web
 
 ES6, Express/Connect fully compatible, POO & Modular Web framework.
 
-[![Build Status](https://travis-ci.org/microscopejs/microscope-web-es6.svg?branch=master)](https://travis-ci.org/microscopejs/microscope-web-es6)
-
 ![microscopejs](https://avatars3.githubusercontent.com/u/8160547?v=3&s=200)
+
+[![Build Status](https://travis-ci.org/microscopejs/microscope-web-es6.svg?branch=master)](https://travis-ci.org/microscopejs/microscope-web-es6)
 
 Requirements
 ------------
