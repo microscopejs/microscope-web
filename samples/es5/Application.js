@@ -7,9 +7,4 @@ var Application = HttpApplication.extend({
 	middlewares: []
 });
 
-var a = new Application();
-a.run(function(){
-	console.log('application running :' + this.port)
-});
-
 module.exports = Application;

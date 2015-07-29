@@ -4,6 +4,8 @@ var filters = require('../filters/commonFilters');
 
 var HomeController = Controller.extend({
 	
+	filters: [filters.controllerFilter],
+	
 	routes: function(){
 		var self = this;
 		return {

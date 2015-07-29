@@ -1,0 +1,5 @@
+var Application = require('../Application');
+
+var a = new Application().run(function(){
+	console.log('application running :' + this.port)
+});
