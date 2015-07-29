@@ -1,6 +1,6 @@
 {
   "name": "microscope-web",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "ES6, Express/Connect fully compatible, POO & Modular Web framework",
   "main": "index.js",
   "scripts": {

@@ -4,11 +4,11 @@
  * @param  {array} arr
  * @return {function}
  */
-function filters(arr) {
+exports.filters = function (arr) {
 	return function (target, key, descriptor) {
 		target.prototype.filters = arr;
 	};
-}
+};
 
 /**
  * routes decorators
@@ -16,11 +16,11 @@ function filters(arr) {
  * @param  {object} actions
  * @return {function}
  */
-function routes(actions) {
+exports.routes = function (actions) {
 	return function (target, key, descriptor) {
 		target.prototype.routes = actions;
 	};
-}
+};
 
 /**
  * controllers decorators
@@ -28,11 +28,11 @@ function routes(actions) {
  * @param  {array} arr
  * @return {function}
  */
-function controllers(arr) {
+exports.controllers = function (arr) {
 	return function (target, key, descriptor) {
 		target.prototype.controllers = arr;
 	};
-}
+};
 
 /**
  * middlewares decorators
@@ -40,11 +40,11 @@ function controllers(arr) {
  * @param  {array} arr
  * @return {function}
  */
-function middlewares(arr) {
+exports.middlewares = function(arr) {
 	return function (target, key, descriptor) {
 		target.prototype.middlewares = arr;
 	};
-}
+};
 
 /**
  * areas decorators
@@ -52,10 +52,8 @@ function middlewares(arr) {
  * @param  {object} obj
  * @return {function}
  */
-function areas(obj) {
+exports.areas = function(obj) {
 	return function (target, key, descriptor) {
 		target.prototype.areas = obj;
 	};
-}
-
-module.exports = { filters, routes, controllers, middlewares, areas };
+};
