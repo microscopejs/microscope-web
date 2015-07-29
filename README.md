@@ -1,8 +1,6 @@
 microscope-web (ES6)
 ====================
 
-## NOT NPM READY YET
-
 ES6, Express/Connect fully compatible, POO & Modular Web framework.
 
 [![Build Status](https://travis-ci.org/microscopejs/microscope-web-es6.svg?branch=master)](https://travis-ci.org/microscopejs/microscope-web-es6)
