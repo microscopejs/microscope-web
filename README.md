@@ -6,7 +6,7 @@ ES6, Express/Connect fully compatible, POO & Modular Web framework.
 ![microscopejs](https://avatars3.githubusercontent.com/u/8160547?v=3&s=200)
 
 [![NPM](https://nodei.co/npm/microscope-web.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/microscope-web/)
-[![Build Status](https://travis-ci.org/microscopejs/microscope-web-es6.svg?branch=master)](https://travis-ci.org/microscopejs/microscope-web-es6)
+[![Build Status](https://travis-ci.org/microscopejs/microscope-web.svg?branch=master)](https://travis-ci.org/microscopejs/microscope-web)
 
 Requirements
 ------------
