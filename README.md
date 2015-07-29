@@ -1,134 +1,222 @@
-microscope-web
-==============
+microscope-web (ES6)
+====================
 
-microscope web framework class.
+## NOT NPM READY YET
 
-HttpApplication
----------------
+ES6, Express/Connect fully compatible, POO & Modular Web framework.
 
-> microscope web application server.
+[![Build Status](https://travis-ci.org/microscopejs/microscope-web-es6.svg?branch=master)](https://travis-ci.org/microscopejs/microscope-web-es6)
 
-sample:
+![microscopejs](http://microscopejs.com/images/mcsp_bg.png)
 
-```js
+Requirements
+------------
 
-// Imports
-var HttpApplication  = require('microscope-web').HttpApplication;
-var AuthApplication  = require('../auth/AuthApplication');
-var logIp            = require('./middlewares/logIp').logIp;
+* node
+* npm
+* gulp
 
-var authApplication = new AuthApplication();
+Node.js installation
+--------------------
 
-/**
- * HttpApllication class example
- */
-var Application = HttpApplication.extend({
-    port:3000,
-    appRoot: __dirname,
+#### Install on OSX
 
-    areas: {
-        '/auth': authApplication.mount()
-    },
+Using homebrew:
 
-    middlewares: [ logIp ]
-});
+	brew install node
 
-module.exports = Application;
+#### Install on Linux (Ubuntu/Mint)
 
-```
+	sudo apt-get install python-software-properties python g++ make
+	sudo add-apt-repository ppa:chris-lea/node.js
+	sudo apt-get update
+	sudo apt-get install nodejs
 
-#### HttpApplication API
+#### Install on Windows
 
-##### appRoot (required) - string
-    
-    Directory name of application.
+[Download Node.js MSI](http://nodejs.org/download/)
 
-##### port - integer
+Installation
+------------
 
-    HTTP server port.
+#### install gulp (sudo on linux/OSX) :
 
-##### configurations - object
+	npm install gulp -g
 
-    set express app configuration : app.set(key, value);
+#### install dependencies (sudo on linux/OSX) :
 
-##### areas - object
+	npm install
 
-    object definition for HttpApplication areas.
-    key : baseRoute, value: other HttpApplication.mount()
+Development commands
+--------------------
 
-##### controllersRoot - array
+#### test (run gulp test):
 
-    folder paths for controller class files.
+	npm test
 
-##### initialize - function
+#### build:
 
-    initialize function called in constructor
+	gulp build
 
-##### _registerConfigurations - function
+* compile src with babel to lib folder
 
-    private - set express app configurations
+#### test:
 
-##### _registerAreas - function
+	gulp test
+	
+* validate source code (jsHint).
 
-    private - register other HttpApplication as area.
+#### docs:
 
-##### _loadModulesFromFolder - function
+	gulp docs
+	
+* generate annoted code documentation (docco).
+* generate annoted code samples documentation (docco).
 
-    private - instantiate class in folders
+How to use ?
+============
 
-##### _boot - function
+Check out [project samples !!!](https://github.com/microscopejs/microscope-web-es6/tree/master/samples)
 
-    private - instantiate controllers class
+Application class
+-----------------
 
-##### run - function
-
-    run http server
-
-##### createServer - function
-
-    alias for run
-
-##### mount - function
-
-    return express application as middleware
-
-
-Controller
-----------
-
-> controller for http requests parsing and responses.
-
-####sample:
+With ES6
 
 ```js
 
-/**
- * Imports.
- */
-var Controller = require('microscope-web').Controller;
+import {HttpApplication} from 'microscope-web';
+import HomeController from './controllers/HomeController';
+import AuthApplication from '../auth/AuthApplication';
+import {logger} from './middlewares/commonMiddleware';
 
-/**
- * HomeController class.
- */
-module.exports = Controller.extend({
+class Application extends HttpApplication {
 
-    baseUrl: "/home",
+	// register application controllers in array
+	get controllers(){
+		return [HomeController];
+	}
 
-    routes: {
-        'get /' : {action: 'index', ignoreBaseUrl: true},
-        'get /about' : 'about'
-    },
+	// register application middlewares in array
+	// templateEngine, logging, authentication, ...
+	// call middleware with express instance in parameter.
+	// configure using app.use([middleware]);
+	get middlewares(){
+		return [logger];
+	}
 
-    // index action.
-    index: function(request, response) {
-        response.render('home/index');
-    },
+	// use AuthApplication class as sub application 
+	// map to /auth/{controller}/{action}
+	get areas(){
+		return {'/auth': AuthApplication}
+	}
+}
 
-    // about action.
-    about: function (request, response) {
-        request.flash('flash', 'test middlewares');
-        response.render('home/about');
-    }
-});
+var a = new Application();
+a.run(() => console.log('application running'));
 
 ```
+
+With experimental ES7
+
+```js
+import {HttpApplication, decorators} from 'microscope-web';
+import AuthApplication from '../auth/AuthApplication';
+import HomeController from './controllers/HomeController';
+import {logger} from './middlewares/commonMiddleware';
+
+var {controllers, middlewares, areas} = decorators;
+
+@controllers([HomeController])
+@middlewares([logger])
+@areas({'/auth': AuthApplication})
+class Application extends HttpApplication {
+	
+}
+
+var a = new Application();
+a.run(() => console.log('application running'));
+
+```
+
+Controller class
+----------------
+
+With ES6:
+
+```js
+
+import {Controller} from 'microscope-web';
+import {controllerFilter, actionFilter} from '../filters/commonFilters';
+
+class HomeController extends Controller {
+
+	// add some controllers filter
+	get filters(){
+		return [controllerFilter];
+	}
+
+	// configure controller routing with callback array
+	get routes(){
+		return {
+			'get /': [actionFilter, this.index.bind(this)],
+			'get /home/about': 'about'
+		}
+	}
+
+	// index action
+	// GET /
+	index(request, response){
+		response.send('index HomeController');
+	}
+
+	// about action
+	// GET /home/about
+	about(request, response){
+		response.send('about HomeController');
+	}
+}
+
+export default HomeController;
+
+```
+
+With experimental ES7
+
+```js
+
+import {Controller, decorators} from 'microscope-web';
+import {controllerFilter, actionFilter} from '../filters/commonFilters';
+var {filters, routes} = decorators;
+
+@filters([controllerFilter])
+@routes({
+	'get /': {filters: [actionFilter], action: 'index'},
+	'get /home/about': 'about'
+})
+class HomeController extends Controller {
+
+	// index action
+	// GET /
+	index(request, response){
+		response.send('index HomeController');
+	}
+
+	// about action
+	// GET /home/about
+	about(request, response){
+		response.send('about HomeController');
+	}
+}
+
+export default HomeController;
+
+```
+
+
+Roadmap
+=======
+
+* TypeScript support
+* improve unit testing
+* deploy to npm as replacement for microscope-web

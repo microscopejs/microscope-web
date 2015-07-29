@@ -1,9 +1,3 @@
-// Imports
-var HttpApplication = require('./libs/HttpApplication');
-var Controller      = require('./libs/Controller');
-var utils           = require('./libs/utils');
-
-// Exports
-exports.HttpApplication = HttpApplication;
-exports.Controller      = Controller;
-exports.utils           = utils;
+exports.HttpApplication = require('./src/HttpApplication');
+exports.Controller      = require('./src/Controller');
+exports.decorators      = require('./src/decorators');

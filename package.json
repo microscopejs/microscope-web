@@ -1,15 +1,20 @@
 {
   "name": "microscope-web",
   "description": "microscope-web HttpApplication class and controller",
-  "version": "0.1.1",
-  "scripts": {},
+  "version": "0.2.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
   "dependencies": {
-    "lodash": "~2.4.1",
-    "express": "~4.8.7"
+    "express": "^4.12.2",
+    "lodash": "^3.5.0"
   },
   "devDependencies": {
-    "mocha": "~1.12.1",
-    "grunt": "~0.4.1",
-    "grunt-docco2": "~0.2.0"
+    "babel": "^5.8.12",
+    "gulp": "^3.8.11",
+    "gulp-docco": "0.0.4",
+    "gulp-jshint": "^1.9.2",
+    "jshint-stylish": "^1.0.0"
   }
 }

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>HttpApplication.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>HttpApplication.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+<span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>);
+<span class="hljs-keyword">var</span> extend = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./utils'</span>).extend;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>HttpApplication class
+Constructor
+instantiate express application</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">HttpApplication</span>(<span class="hljs-params"></span>) </span>{
+	<span class="hljs-keyword">this</span>.app = express();
+	<span class="hljs-keyword">this</span>._registerConfigurations();
+	<span class="hljs-keyword">this</span>._registerMiddlewares();
+	<span class="hljs-keyword">this</span>._registerControllers();
+	<span class="hljs-keyword">this</span>._registerAreas();
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>http server port</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>HttpApplication.prototype.port = process.env.PORT || <span class="hljs-number">3000</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>application configurations object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>HttpApplication.prototype.configurations = {
+	env: <span class="hljs-string">'dev'</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>instantiate, mount and register application controller</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>HttpApplication.prototype._registerControllers = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+	_.each(<span class="hljs-keyword">this</span>.controllers, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">Controller</span>)</span>{
+		<span class="hljs-keyword">var</span> c = <span class="hljs-keyword">new</span> Controller(<span class="hljs-keyword">this</span>.app);
+		<span class="hljs-keyword">this</span>.app.use(c.baseUrl, c.mount());
+	}.bind(<span class="hljs-keyword">this</span>));
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>register application middlewares</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>HttpApplication.prototype._registerConfigurations = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+	_.each(<span class="hljs-keyword">this</span>.configurations, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">config</span>)</span>{
+		<span class="hljs-keyword">this</span>.app.set(config, <span class="hljs-keyword">this</span>.configurations[config]);
+	}.bind(<span class="hljs-keyword">this</span>));
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>register application middlewares
+call each middleware with express instance in param</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>HttpApplication.prototype._registerMiddlewares = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+	_.each(<span class="hljs-keyword">this</span>.middlewares, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">middleware</span>)</span>{
+		middleware(<span class="hljs-keyword">this</span>.app);
+	}.bind(<span class="hljs-keyword">this</span>));
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>register application areas
+use other HttpApplication mounted instance as area</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>HttpApplication.prototype._registerAreas = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+	_.each(<span class="hljs-keyword">this</span>.areas, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">area</span>)</span>{
+		<span class="hljs-keyword">var</span> HttpApplication = <span class="hljs-keyword">this</span>.areas[area];
+		<span class="hljs-keyword">var</span> h = <span class="hljs-keyword">new</span> HttpApplication();
+		<span class="hljs-keyword">this</span>.app.use(area, h.mount());
+	}.bind(<span class="hljs-keyword">this</span>));
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>run HttpApplication and callback</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>HttpApplication.prototype.run = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">callback</span>)</span>{
+	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.app.listen(<span class="hljs-keyword">this</span>.port, callback.bind(<span class="hljs-keyword">this</span>));
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>export configured express instance</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>HttpApplication.prototype.mount = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.app;
+};
+
+HttpApplication.prototype.controllers = [];
+HttpApplication.prototype.middlewares = [];
+HttpApplication.prototype.areas       = {};
+HttpApplication.extend = extend;
+
+<span class="hljs-built_in">module</span>.exports = HttpApplication;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
