@@ -5,7 +5,7 @@ ES6, Express/Connect fully compatible, POO & Modular Web framework.
 
 [![Build Status](https://travis-ci.org/microscopejs/microscope-web-es6.svg?branch=master)](https://travis-ci.org/microscopejs/microscope-web-es6)
 
-![microscopejs](http://microscopejs.com/images/mcsp_bg.png)
+![microscopejs](https://avatars3.githubusercontent.com/u/8160547?v=3&s=200)
 
 Requirements
 ------------
@@ -74,7 +74,7 @@ Development commands
 How to use ?
 ============
 
-Check out [project samples !!!](https://github.com/microscopejs/microscope-web-es6/tree/master/samples)
+Check out [project samples !!!](https://github.com/microscopejs/microscope-web/tree/master/samples)
 
 Application class
 -----------------
