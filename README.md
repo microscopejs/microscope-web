@@ -81,6 +81,37 @@ Check out [project samples !!!](https://github.com/microscopejs/microscope-web-e
 Application class
 -----------------
 
+With ES5
+
+```js
+
+var HttpApplication = require('../../src/HttpApplication');
+var HomeController = require('./controllers/HomeController');
+var AuthApplication = require('../auth/AuthApplication');
+var logger = require('./middlewares/commonMiddleware');
+
+var Application = HttpApplication.extend({
+	
+	// register application controllers in array
+	controllers: [HomeController],
+	
+	// register application middlewares in array
+	// templateEngine, logging, authentication, ...
+	// call middleware with express instance in parameter.
+	// configure using app.use([middleware]);
+	middlewares: [logger],
+	
+	// use AuthApplication class as sub application 
+	// map to /auth/{controller}/{action}
+	areas: {
+		'/auth': AuthApplication
+	}
+});
+
+module.exports = Application;
+
+```
+
 With ES6
 
 ```js
@@ -141,6 +172,42 @@ a.run(() => console.log('application running'));
 
 Controller class
 ----------------
+
+With ES5:
+
+```js
+
+var Controller = require('../../../src/Controller');
+var filters = require('../filters/commonFilters');
+
+var HomeController = Controller.extend({
+	
+	filters: [filters.controllerFilter],
+	
+	routes: function(){
+		var self = this;
+		return {
+			'get /': [filters.actionFilter, self.index],
+			'get /home/about': 'about'
+		};
+	},
+
+	// index action
+	// GET /
+	index: function(request, response){
+		response.send('index HomeController');
+	},
+
+	// about action
+	// GET /home/about
+	about: function(request, response){
+		response.send('about HomeController');
+	}
+});
+
+module.exports = HomeController;
+
+```
 
 With ES6:
 
@@ -217,6 +284,6 @@ export default HomeController;
 Roadmap
 =======
 
+* update NPM
 * TypeScript support
 * improve unit testing
-* deploy to npm as replacement for microscope-web
