@@ -84,7 +84,7 @@ With ES5
 
 ```js
 
-var HttpApplication = require('../../src/HttpApplication');
+var HttpApplication = require('microscope-web').HttpApplication;
 var HomeController = require('./controllers/HomeController');
 var AuthApplication = require('../auth/AuthApplication');
 var logger = require('./middlewares/commonMiddleware');
@@ -280,6 +280,5 @@ export default HomeController;
 Roadmap
 =======
 
-* update NPM
-* TypeScript support
+* TypeScript definition support
 * improve unit testing
