@@ -6,12 +6,9 @@ var HomeController = Controller.extend({
 	
 	filters: [filters.controllerFilter],
 	
-	routes: function(){
-		var self = this;
-		return {
-			'get /': [filters.actionFilter, self.index],
-			'get /home/about': 'about'
-		};
+	routes: {
+		'get /': [filters.actionFilter, 'index'],
+		'get /home/about': 'about'
 	},
 
 	// index action

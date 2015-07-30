@@ -12,7 +12,7 @@ class HomeController extends Controller {
 	// configure controller routing with callback array
 	get routes(){
 		return {
-			'get /': [actionFilter, this.index.bind(this)],
+			'get /': [actionFilter, 'index'],
 			'get /home/about': 'about'
 		}
 	}

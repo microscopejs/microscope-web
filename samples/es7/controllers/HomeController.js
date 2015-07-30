@@ -6,8 +6,8 @@ var {filters, routes} = decorators;
 
 @filters([controllerFilter])
 @routes({
-    'get /': {filters: [actionFilter], action: 'index'},
-    'get /home/about': 'about'
+	'get /': [actionFilter, 'index'],
+	'get /home/about': 'about'
 })
 class HomeController extends Controller {
 

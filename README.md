@@ -176,19 +176,16 @@ With ES5:
 
 ```js
 
-var Controller = require('../../../src/Controller');
+var Controller = require('microscope-web').Controller;
 var filters = require('../filters/commonFilters');
 
 var HomeController = Controller.extend({
 	
 	filters: [filters.controllerFilter],
 	
-	routes: function(){
-		var self = this;
-		return {
-			'get /': [filters.actionFilter, self.index],
-			'get /home/about': 'about'
-		};
+	routes: {
+		'get /': [filters.actionFilter, 'index'],
+		'get /home/about': 'about'
 	},
 
 	// index action
@@ -225,7 +222,7 @@ class HomeController extends Controller {
 	// configure controller routing with callback array
 	get routes(){
 		return {
-			'get /': [actionFilter, this.index.bind(this)],
+			'get /': [actionFilter, 'index'],
 			'get /home/about': 'about'
 		}
 	}
@@ -257,7 +254,7 @@ var {filters, routes} = decorators;
 
 @filters([controllerFilter])
 @routes({
-	'get /': {filters: [actionFilter], action: 'index'},
+	'get /': [actionFilter, 'index'],
 	'get /home/about': 'about'
 })
 class HomeController extends Controller {
