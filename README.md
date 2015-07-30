@@ -53,12 +53,6 @@ Development commands
 
 	npm test
 
-#### build:
-
-	gulp build
-
-* compile src with babel to lib folder
-
 #### test:
 
 	gulp test
