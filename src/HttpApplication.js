@@ -11,10 +11,13 @@ function HttpApplication() {
 	this._registerMiddlewares();
 	this._registerControllers();
 	this._registerAreas();
+	this.initialize.apply(this, arguments);
 }
 
 // http server port
 HttpApplication.prototype.port = process.env.PORT || 3000;
+
+HttpApplication.prototype.initialize = function(){};
 
 // application configurations object
 HttpApplication.prototype.configurations = {

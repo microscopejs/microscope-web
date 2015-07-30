@@ -6,9 +6,15 @@ var HomeController = Controller.extend({
 	
 	filters: [filters.controllerFilter],
 	
+	test: 'test',
+	
 	routes: {
 		'get /': [filters.actionFilter, 'index'],
 		'get /home/about': 'about'
+	},
+	
+	initialize: function(){
+		console.log("controller booted");
 	},
 
 	// index action

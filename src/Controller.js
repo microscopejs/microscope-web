@@ -8,10 +8,13 @@ var extend = require('./utils').extend;
 function Controller() {
 	this.router = express.Router();
 	this._parseRoutes();
+	this.initialize.apply(this, arguments);
 }
 
 // controller url namespace
 Controller.prototype.baseUrl = '/';
+
+Controller.prototype.initialize = function(){};
 
 // parse controller routing & bind callback stack
 Controller.prototype._parseRoutes = function () {
@@ -40,7 +43,7 @@ Controller.prototype._parseRoutes = function () {
 				}
 
 				if (_.isFunction(fn)) {
-					callbackStack.push(fn);
+					callbackStack.push(fn.bind(this));
 				}else{
 					throw new Error('route callback stack is not valid');
 				}
