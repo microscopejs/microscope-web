@@ -31,20 +31,17 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> HttpApplication = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../src/HttpApplication'</span>);
-<span class="hljs-keyword">var</span> HomeController = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./controllers/HomeController'</span>);
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> HttpApplication <span class="hljs-keyword">from</span> <span class="hljs-string">'../../src/HttpApplication'</span>;
+<span class="hljs-keyword">import</span> HomeController <span class="hljs-keyword">from</span> <span class="hljs-string">'./controllers/HomeController'</span>;
 
-<span class="hljs-keyword">var</span> Application = HttpApplication.extend({
-	
-	initialize: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
-		<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"application booted"</span>);
-	},
-	
-	controllers: [HomeController],
-	middlewares: []
-});
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Application</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpApplication</span> </span>{
 
-<span class="hljs-built_in">module</span>.exports = Application;</pre></div></div>
+	get controllers(){
+		<span class="hljs-keyword">return</span> [HomeController];
+	}
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Application;</pre></div></div>
             
         </li>
         

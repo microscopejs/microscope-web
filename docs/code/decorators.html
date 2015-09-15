@@ -36,11 +36,11 @@
  * @param  {array} arr
  * @return {function}
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">filters</span>(<span class="hljs-params">arr</span>) </span>{
+exports.filters = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">arr</span>) </span>{
 	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">target, key, descriptor</span>) </span>{
 		target.prototype.filters = arr;
 	};
-}
+};
 
 <span class="hljs-comment">/**
  * routes decorators
@@ -48,11 +48,11 @@
  * @param  {object} actions
  * @return {function}
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">routes</span>(<span class="hljs-params">actions</span>) </span>{
+exports.routes = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">actions</span>) </span>{
 	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">target, key, descriptor</span>) </span>{
 		target.prototype.routes = actions;
 	};
-}
+};
 
 <span class="hljs-comment">/**
  * controllers decorators
@@ -60,11 +60,11 @@
  * @param  {array} arr
  * @return {function}
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">controllers</span>(<span class="hljs-params">arr</span>) </span>{
+exports.controllers = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">arr</span>) </span>{
 	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">target, key, descriptor</span>) </span>{
 		target.prototype.controllers = arr;
 	};
-}
+};
 
 <span class="hljs-comment">/**
  * middlewares decorators
@@ -72,11 +72,11 @@
  * @param  {array} arr
  * @return {function}
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">middlewares</span>(<span class="hljs-params">arr</span>) </span>{
+exports.middlewares = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">arr</span>) </span>{
 	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">target, key, descriptor</span>) </span>{
 		target.prototype.middlewares = arr;
 	};
-}
+};
 
 <span class="hljs-comment">/**
  * areas decorators
@@ -84,13 +84,11 @@
  * @param  {object} obj
  * @return {function}
  */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">areas</span>(<span class="hljs-params">obj</span>) </span>{
+exports.areas = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">obj</span>) </span>{
 	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">target, key, descriptor</span>) </span>{
 		target.prototype.areas = obj;
 	};
-}
-
-<span class="hljs-built_in">module</span>.exports = { filters, routes, controllers, middlewares, areas };</pre></div></div>
+};</pre></div></div>
             
         </li>
         

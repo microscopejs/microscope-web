@@ -31,23 +31,17 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Controller = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../../src/Controller'</span>);
-<span class="hljs-keyword">var</span> filters = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../filters/commonFilters'</span>);
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Controller <span class="hljs-keyword">from</span> <span class="hljs-string">'../../../src/Controller'</span>;
+<span class="hljs-keyword">import</span> {controllerFilter, actionFilter} <span class="hljs-keyword">from</span> <span class="hljs-string">'../filters/commonFilters'</span>;
+<span class="hljs-keyword">import</span> decorators <span class="hljs-keyword">from</span> <span class="hljs-string">'../../../src/decorators'</span>;
+<span class="hljs-keyword">var</span> {filters, routes} = decorators;
 
-<span class="hljs-keyword">var</span> HomeController = Controller.extend({
-	
-	filters: [filters.controllerFilter],
-	
-	test: <span class="hljs-string">'test'</span>,
-	
-	routes: {
-		<span class="hljs-string">'get /'</span>: [filters.actionFilter, <span class="hljs-string">'index'</span>],
-		<span class="hljs-string">'get /home/about'</span>: <span class="hljs-string">'about'</span>
-	},
-	
-	initialize: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
-		<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"controller booted"</span>);
-	},</pre></div></div>
+@filters([controllerFilter])
+@routes({
+	<span class="hljs-string">'get /'</span>: [actionFilter, <span class="hljs-string">'index'</span>],
+	<span class="hljs-string">'get /home/about'</span>: <span class="hljs-string">'about'</span>
+})
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HomeController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Controller</span> </span>{</pre></div></div>
             
         </li>
         
@@ -63,9 +57,9 @@ GET /</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	index: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>)</span>{
+            <div class="content"><div class='highlight'><pre>	index(request, response){
 		response.send(<span class="hljs-string">'index HomeController'</span>);
-	},</pre></div></div>
+	}</pre></div></div>
             
         </li>
         
@@ -81,12 +75,12 @@ GET /home/about</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	about: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>)</span>{
+            <div class="content"><div class='highlight'><pre>	about(request, response){
 		response.send(<span class="hljs-string">'about HomeController'</span>);
 	}
-});
+}
 
-<span class="hljs-built_in">module</span>.exports = HomeController;</pre></div></div>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> HomeController;</pre></div></div>
             
         </li>
         

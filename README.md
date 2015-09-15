@@ -275,4 +275,4 @@ Roadmap
 =======
 
 * TypeScript definition support
-* improve unit testing
+* improve testing using webdriverio & selenium

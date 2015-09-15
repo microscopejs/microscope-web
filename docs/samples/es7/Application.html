@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Application.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Application.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>Imports</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> HttpApplication <span class="hljs-keyword">from</span> <span class="hljs-string">'../../src/HttpApplication'</span>;
+<span class="hljs-keyword">import</span> decorators <span class="hljs-keyword">from</span> <span class="hljs-string">'../../src/decorators'</span>;
+<span class="hljs-keyword">import</span> HomeController <span class="hljs-keyword">from</span> <span class="hljs-string">'./controllers/HomeController'</span>;
+<span class="hljs-keyword">var</span> {controllers, middlewares, areas} = decorators;
+
+@controllers([HomeController])
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Application</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpApplication</span> </span>{
+
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Application;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

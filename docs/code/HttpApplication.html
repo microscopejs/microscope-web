@@ -55,6 +55,7 @@ instantiate express application</p>
 	<span class="hljs-keyword">this</span>._registerMiddlewares();
 	<span class="hljs-keyword">this</span>._registerControllers();
 	<span class="hljs-keyword">this</span>._registerAreas();
+	<span class="hljs-keyword">this</span>.initialize.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
 }</pre></div></div>
             
         </li>
@@ -70,7 +71,9 @@ instantiate express application</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>HttpApplication.prototype.port = process.env.PORT || <span class="hljs-number">3000</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>HttpApplication.prototype.port = process.env.PORT || <span class="hljs-number">3000</span>;
+
+HttpApplication.prototype.initialize = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{};</pre></div></div>
             
         </li>
         

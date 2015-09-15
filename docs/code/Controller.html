@@ -52,6 +52,7 @@ instantiate express router</p>
             <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Controller</span>(<span class="hljs-params"></span>) </span>{
 	<span class="hljs-keyword">this</span>.router = express.Router();
 	<span class="hljs-keyword">this</span>._parseRoutes();
+	<span class="hljs-keyword">this</span>.initialize.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
 }</pre></div></div>
             
         </li>
@@ -67,7 +68,9 @@ instantiate express router</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Controller.prototype.baseUrl = <span class="hljs-string">'/'</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>Controller.prototype.baseUrl = <span class="hljs-string">'/'</span>;
+
+Controller.prototype.initialize = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{};</pre></div></div>
             
         </li>
         
@@ -82,17 +85,58 @@ instantiate express router</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Controller.prototype._parseRoutes = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+            <div class="content"><div class='highlight'><pre>Controller.prototype._parseRoutes = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
 	<span class="hljs-keyword">var</span> routeSplitter = <span class="hljs-regexp">/^(\S+)\s*(.*)$/</span>;
-	
+
 	<span class="hljs-keyword">var</span> routes = _.result(<span class="hljs-keyword">this</span>, <span class="hljs-string">'routes'</span>);
 
-	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> prop <span class="hljs-keyword">in</span> routes) {
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> prop <span class="hljs-keyword">in</span> routes) {
 		<span class="hljs-keyword">var</span> match = prop.match(routeSplitter);
 		<span class="hljs-keyword">var</span> verb = match[<span class="hljs-number">1</span>];
 		<span class="hljs-keyword">var</span> routeUrl = match[<span class="hljs-number">2</span>];
 		<span class="hljs-keyword">var</span> route = routes[prop];
-		<span class="hljs-keyword">var</span> stack;</pre></div></div>
+		<span class="hljs-keyword">var</span> stack;
+
+		<span class="hljs-keyword">if</span> (_.isArray(route)) {
+			<span class="hljs-keyword">var</span> callbackStack = [];
+
+			<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; route.length; i++) {
+				<span class="hljs-keyword">var</span> item = route[i];
+				<span class="hljs-keyword">var</span> fn;
+
+				<span class="hljs-keyword">if</span> (_.isString(item)) {
+					fn = <span class="hljs-keyword">this</span>[item];
+				} <span class="hljs-keyword">else</span> {
+					fn = item;
+				}
+
+				<span class="hljs-keyword">if</span> (_.isFunction(fn)) {
+					callbackStack.push(fn.bind(<span class="hljs-keyword">this</span>));
+				}<span class="hljs-keyword">else</span>{
+					<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'route callback stack is not valid'</span>);
+				}
+			}
+
+			stack = _.union(<span class="hljs-keyword">this</span>.filters, callbackStack);
+			<span class="hljs-keyword">this</span>.router[verb](routeUrl, stack);
+		}
+
+		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (_.isString(route)) {
+			stack = _.union(<span class="hljs-keyword">this</span>.filters, [_.get(<span class="hljs-keyword">this</span>, route).bind(<span class="hljs-keyword">this</span>)]);
+			<span class="hljs-keyword">this</span>.router[verb](routeUrl, stack);
+		}
+
+		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (_.isObject(route)) {
+			stack = _.union(<span class="hljs-keyword">this</span>.filters, route.filters);
+			stack.push(_.get(<span class="hljs-keyword">this</span>, route.action).bind(<span class="hljs-keyword">this</span>));
+			<span class="hljs-keyword">this</span>.router[verb](routeUrl, stack);
+		}
+
+		<span class="hljs-keyword">else</span> {
+			<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Invalid route definition'</span>);
+		}
+	}
+};</pre></div></div>
             
         </li>
         
@@ -103,46 +147,11 @@ instantiate express router</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>TODO for each element in array =&gt; if string it is inner fn</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(_.isArray(route)){
-			stack = _.union(<span class="hljs-keyword">this</span>.filters, route);
-			<span class="hljs-keyword">this</span>.router[verb](routeUrl, stack);
-		}
-
-		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(_.isString(route)){
-			stack = _.union(<span class="hljs-keyword">this</span>.filters, [_.get(<span class="hljs-keyword">this</span>, route).bind(<span class="hljs-keyword">this</span>)]);
-			<span class="hljs-keyword">this</span>.router[verb](routeUrl, stack);
-		}
-
-		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(_.isObject(route)){
-			stack = _.union(<span class="hljs-keyword">this</span>.filters, route.filters);
-			stack.push(_.get(<span class="hljs-keyword">this</span>, route.action).bind(<span class="hljs-keyword">this</span>));
-			<span class="hljs-keyword">this</span>.router[verb](routeUrl, stack);
-		}
-
-		<span class="hljs-keyword">else</span>{
-			<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Invalid route definition'</span>);
-		}
-	}
-};</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
               <p>export configured express router</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Controller.prototype.mount = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+            <div class="content"><div class='highlight'><pre>Controller.prototype.mount = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
 	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.router;
 };
 
