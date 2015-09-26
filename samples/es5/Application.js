@@ -4,9 +4,7 @@ var HomeController = require('./controllers/HomeController');
 
 var Application = HttpApplication.extend({
 	
-	initialize: function(){
-		console.log("application booted");
-	},
+	initialize: function(){},
 	
 	controllers: [HomeController],
 	middlewares: []

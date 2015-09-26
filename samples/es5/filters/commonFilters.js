@@ -1,11 +1,11 @@
 // sample controller filter
 exports.controllerFilter = function(req, res, next) {
-	console.log('sample controller filter: ' + req.url);
+	res.locals.isControllerFilter = true;
 	next();
 };
 
 // sample action filter
 exports.actionFilter = function(req, res, next) {
-	console.log('sample action filter');
+	res.locals.isActionFilter = true;
 	next();
 };

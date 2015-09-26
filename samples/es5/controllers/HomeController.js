@@ -13,20 +13,26 @@ var HomeController = Controller.extend({
 		'get /home/about': 'about'
 	},
 	
-	initialize: function(){
-		console.log("controller booted");
-	},
+	initialize: function(){},
 
 	// index action
 	// GET /
 	index: function(request, response){
-		response.send('index HomeController');
+		response.json({
+			page: 'index HomeController',
+			isControllerFilter: response.locals.isControllerFilter,
+			isActionFilter: response.locals.isActionFilter || false
+		});
 	},
 
 	// about action
 	// GET /home/about
 	about: function(request, response){
-		response.send('about HomeController');
+		response.json({
+			page: 'about HomeController',
+			isControllerFilter: response.locals.isControllerFilter,
+			isActionFilter: response.locals.isActionFilter || false
+		});
 	}
 });
 

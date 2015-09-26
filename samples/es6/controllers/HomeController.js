@@ -20,13 +20,21 @@ class HomeController extends Controller {
 	// index action
 	// GET /
 	index(request, response){
-		response.send('index HomeController');
+		response.json({
+			page: 'index HomeController',
+			isControllerFilter: response.locals.isControllerFilter,
+			isActionFilter: response.locals.isActionFilter || false
+		});
 	}
 
 	// about action
 	// GET /home/about
 	about(request, response){
-		response.send('about HomeController');
+		response.json({
+			page: 'about HomeController',
+			isControllerFilter: response.locals.isControllerFilter,
+			isActionFilter: response.locals.isActionFilter || false
+		});
 	}
 }
 

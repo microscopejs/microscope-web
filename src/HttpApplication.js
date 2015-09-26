@@ -59,7 +59,12 @@ HttpApplication.prototype._registerAreas = function(){
 
 // run HttpApplication and callback
 HttpApplication.prototype.run = function(callback){
-	return this.app.listen(this.port, callback.bind(this));
+	if(callback){
+		return this.app.listen(this.port, callback.bind(this));	
+	}
+	else{
+		return this.app.listen(this.port);
+	}
 };
 
 // export configured express instance
