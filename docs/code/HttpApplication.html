@@ -187,7 +187,12 @@ use other HttpApplication mounted instance as area</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>HttpApplication.prototype.run = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">callback</span>)</span>{
-	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.app.listen(<span class="hljs-keyword">this</span>.port, callback.bind(<span class="hljs-keyword">this</span>));
+	<span class="hljs-keyword">if</span>(callback){
+		<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.app.listen(<span class="hljs-keyword">this</span>.port, callback.bind(<span class="hljs-keyword">this</span>));	
+	}
+	<span class="hljs-keyword">else</span>{
+		<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.app.listen(<span class="hljs-keyword">this</span>.port);
+	}
 };</pre></div></div>
             
         </li>

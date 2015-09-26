@@ -45,9 +45,7 @@
 		<span class="hljs-string">'get /home/about'</span>: <span class="hljs-string">'about'</span>
 	},
 	
-	initialize: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
-		<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"controller booted"</span>);
-	},</pre></div></div>
+	initialize: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{},</pre></div></div>
             
         </li>
         
@@ -64,7 +62,11 @@ GET /</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>	index: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>)</span>{
-		response.send(<span class="hljs-string">'index HomeController'</span>);
+		response.json({
+			page: <span class="hljs-string">'index HomeController'</span>,
+			isControllerFilter: response.locals.isControllerFilter,
+			isActionFilter: response.locals.isActionFilter || <span class="hljs-literal">false</span>
+		});
 	},</pre></div></div>
             
         </li>
@@ -82,7 +84,11 @@ GET /home/about</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>	about: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>)</span>{
-		response.send(<span class="hljs-string">'about HomeController'</span>);
+		response.json({
+			page: <span class="hljs-string">'about HomeController'</span>,
+			isControllerFilter: response.locals.isControllerFilter,
+			isActionFilter: response.locals.isActionFilter || <span class="hljs-literal">false</span>
+		});
 	}
 });
 
