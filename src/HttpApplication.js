@@ -34,8 +34,8 @@ HttpApplication.prototype._registerControllers = function(){
 
 // register application middlewares
 HttpApplication.prototype._registerConfigurations = function(){
-	_.each(this.configurations, function(config){
-		this.app.set(config, this.configurations[config]);
+	_.each(this.configurations, function(item, index){
+		this.app.set(index, item);
 	}.bind(this));
 };
 
@@ -50,10 +50,10 @@ HttpApplication.prototype._registerMiddlewares = function(){
 // register application areas
 // use other HttpApplication mounted instance as area
 HttpApplication.prototype._registerAreas = function(){
-	_.each(this.areas, function(area){
-		var HttpApplication = this.areas[area];
+	_.each(this.areas, function(item, index){
+		var HttpApplication = item;
 		var h = new HttpApplication();
-		this.app.use(area, h.mount());
+		this.app.use(index, h.mount());
 	}.bind(this));
 };
 
