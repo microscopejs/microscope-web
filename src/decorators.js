@@ -57,3 +57,15 @@ exports.areas = function(obj) {
 		target.prototype.areas = obj;
 	};
 };
+
+/**
+ * url decorators
+ * target Controller class
+ * @param  {array} arr
+ * @return {function}
+ */
+exports.url = function (url) {
+	return function (target, key, descriptor) {
+		target.prototype.baseUrl = url;
+	};
+};
